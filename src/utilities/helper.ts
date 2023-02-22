@@ -26,7 +26,7 @@ export function generateUUID() {
 }
 
 
-export function addressShortener(address: string, length: number = 8) {
+export function addressShortener(address: string, length: number = 4) {
     return `${address.substr(0, length)}...${address.substr(address.length - length, address.length)}`;
 }
 

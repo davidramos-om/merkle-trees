@@ -37,6 +37,22 @@ export async function getEthBlock(blockNumber: number, providerRpc: string) {
     };
 }
 
+export function totalGwei(transaction: ethers.Block) {
+
+    const gasPrice = transaction.gasUsed;
+    const gasLimit = transaction.gasLimit;
+    const totalGwei = gasPrice * gasLimit;
+    return totalGwei;
+}
+
+export function calculateBurnFee(transaction: ethers.Block) {
+
+    const _totalGwei = totalGwei(transaction)
+    const _totalEth = parseFloat(ethers.formatEther(_totalGwei));
+    const _totalBurnFee = _totalEth * 0.1;
+    return _totalBurnFee;
+}
+
 export function getEnsName(address: string, providerRpc: string) {
 
     setProviderInstance(providerRpc, getProviderInstance(providerRpc));
