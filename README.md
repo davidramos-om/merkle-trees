@@ -14,12 +14,12 @@ style="width: 300px; height: 300px; background-color: rgba(230,93,292,0.2)
 
 <hr />
 <img 
-src="./public/merkle-tree.webp"
+src="./public/preview.png"
 alt="merkle-tree"
-style="width: 512px; height: 225px; background-color: rgba(230,93,292,0.2)
 ;"
 />
 </div>
+
 
 # Built with
 1. [Vite](https://vite.org/)

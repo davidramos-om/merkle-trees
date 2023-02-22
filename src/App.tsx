@@ -1,34 +1,105 @@
 import './App.css'
-import { ThemeMode } from './ThemeMode';
+import { useEffect, useState } from "react";
+import { Block, TransactionResponse } from 'ethers';
 
+import { ThemeMode } from './components/ThemeMode';
+import BlockForm from './components/BlockForm';
+import BlockTransactions from "./components/BlockTransactions";
+import BlockData from "./components/BlockData";
+import { getEthBlock } from './api/blockchain';
 
 function App() {
 
+  const [ blockData, setBlockData ] = useState<Block | null>(null);
+  const [ transactions, setTransactions ] = useState<TransactionResponse[]>([]);
+  const [ params, setParams ] = useState<{ block: number, provider: string }>({ block: 0, provider: '' });
+
+  useEffect(() => {
+
+    let active = true;
+
+    const cb = async () => {
+
+      if (!params.block || !params.provider)
+        return;
+
+      const data = await getEthBlock(params.block, params.provider);
+      if (!data)
+        return;
+
+      if (active)
+        setBlockData(data.block);
+
+      if (active)
+        setTransactions(data.transactions);
+    }
+
+    cb();
+
+    return () => {
+      active = false;
+    }
+  }, [ params.block, params.provider ]);
+
+
+  const handleSubmit = (block: number, prov: string) => {
+
+    // if (block !== params.block && prov !== params.provider)
+    setParams({ block, provider: prov });
+  }
+
+  const handleSetBlock = (block: number) => {
+    setParams({ ...params, block });
+  }
+
   return (
-    <>
-      <div className="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]">
-        <svg className="relative left-[calc(50%-11rem)] -z-10 h-[21.1875rem] max-w-none -translate-x-1/2 rotate-[30deg] sm:left-[calc(50%-30rem)] sm:h-[42.375rem]" viewBox="0 0 1155 678">
-          <path fill="url(#45de2b6b-92d5-4d68-a6a0-9b9b2abad533)" fillOpacity=".3" d="M317.219 518.975L203.852 678 0 438.341l317.219 80.634 204.172-286.402c1.307 132.337 45.083 346.658 209.733 145.248C936.936 126.058 882.053-94.234 1031.02 41.331c119.18 108.451 130.68 295.337 121.53 375.223L855 299l21.173 362.054-558.954-142.079z" />
-          <defs>
-            <linearGradient id="45de2b6b-92d5-4d68-a6a0-9b9b2abad533" x1="1155.49" x2="-78.208" y1=".177" y2="474.645" gradientUnits="userSpaceOnUse">
-              <stop stopColor="#9089FC" />
-              <stop offset="1" stopColor="#FF80B5" />
-            </linearGradient>
-          </defs>
-        </svg>
-      </div>
+    <div className="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
 
       <ThemeMode />
-
-      <h1
-        className="font-extrabold text-transparent text-5xl lg:text-8xl bg-clip-text bg-gradient-to-b from-gray-900 via-purple-900 to-violet-600 break-words "
-      >
-        Merkle Tree
-      </h1>
       <div className="flex flex-row items-center justify-center text-gray-600" >
-        <img src="/merkle-tree-logo.png" alt="logo" width={280} height={180} />
+        <img
+          src="/merkle-tree-logo.png"
+          alt="logo"
+          width={280}
+          height={180}
+        />
       </div>
-    </>
+      <div className="flex flex-row items-center justify-center text-gray-600" >
+        <div className="max-w-screen-md mb-8 mt-8 lg:mb-16 lg:mt-16">
+          <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+            What is
+          </h2>
+          <h1
+            className="
+            font-extrabold text-transparent text-5xl lg:text-8xl bg-clip-text bg-gradient-to-r from-green-400 to-blue-500 bg-gradient-to-b from-gray-900 via-purple-900 to-violet-600 dark:from-green-900 via-blue-900  dark:to-orange-900"
+          >
+            Merkle Tree?
+          </h1>
+          <p className="text-gray-200 sm:text-xl dark:text-gray-400">
+            It is a binary tree in which every leaf node is labelled with the hash of a data block and every non-leaf node is labelled with the cryptographic hash of the labels of its child nodes. The root of the tree, labelled with the hash of all the data in the tree, can be used to verify the contents of any leaf node in the tree without having to reveal the contents of that node or the entire tree.
+          </p>
+        </div>
+
+        <div className="bg-transparent shadow-lg rounded-lg p-6 border-b-2 border-t-2 border-r-1 border-l-1.5 ">
+          <BlockForm onSubmit={handleSubmit} />
+        </div>
+      </div>
+      <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+
+      {blockData && (
+        <BlockData
+          blockData={blockData}
+          rpcProvider={params.provider}
+          onBlockChange={handleSetBlock}
+        />
+      )}
+
+      <div className="bg-transparent shadow-lg rounded-lg p-6 border-1 ">
+        <BlockTransactions
+          transactions={transactions}
+        />
+      </div>
+    </div>
   );
 }
 
