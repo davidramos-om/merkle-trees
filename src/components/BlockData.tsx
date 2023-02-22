@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { formatDistanceToNow, format } from 'date-fns';
-import { Block, formatUnits } from 'ethers';
+import { Block, formatUnits, Transaction } from 'ethers';
 
-import { getEnsName } from "../api/blockchain";
+import { getEnsName, totalGwei } from "../api/blockchain";
 import { addressShortener, formatNumber } from "../utilities/helper";
 import { MagicIcon } from "./MagicIcon";
 
@@ -67,74 +67,128 @@ function BlockDataDetails({ blockData, rpcProvider }: { blockData: Block, rpcPro
     }, [ blockData.miner ]);
 
     return (
-        <div className="px-4 md:px-6 mx-auto w-full">
-            <div>
-                <div className="flex flex-wrap">
-                    <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
-                        <div className="relative flex flex-col min-w-0 break-words rounded-lg mb-6 xl:mb-0 shadow-lg border-2 border-thin">
-                            <div className="flex-auto p-4">
-                                <div className="flex flex-wrap">
-                                    <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
-                                        <h5 className="text-blueGray-400 uppercase font-bold text-xs">Status</h5>
-                                        <span
-                                            className={`font-bold text-xl ${blockData.number > 0 ? "text-green-500" : "text-red-500"}`}
-                                        >
-                                            {blockData.number > 0 ? "Success" : "Failed"}
-                                        </span>
-                                    </div>
-                                </div>
-                                <p className="text-sm text-blueGray-500 mt-4">
-                                    <span className="text-emerald-500 mr-2">
-                                        <i className="fas fa-arrow-up"></i>Timestamp</span>
-                                    <span className="whitespace-nowrap">
-                                        {` ${formatDistanceToNow(blockData.timestamp * 1000)} | ${format(blockData.timestamp * 1000, 'dd/MM/yyyy HH:mm:ss')}`}
-                                    </span>
-                                </p>
-                                <p className="text-sm text-blueGray-500 mt-4">
-                                    <span className="text-pink-500 mr-2">
-                                        <i className="fas fa-arrow-up"></i>Transactions:</span>
-                                    <span className="whitespace-nowrap">
-                                        {blockData.transactions.length}
-                                    </span>
-                                </p>
+        <div className="flex flex-wrap">
+            <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
+                <div className="relative flex flex-col min-w-0 break-words rounded-lg mb-6 xl:mb-0 shadow-lg border-2 border-thin">
+                    <div className="flex-auto p-4">
+                        <div className="flex flex-wrap">
+                            <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
+                                <h5 className="text-blueGray-100 uppercase font-bold text-xs">Status</h5>
+                                <span
+                                    className={`font-bold text-xl ${blockData.number > 0 ? "text-green-500" : "text-red-500"}`}
+                                >
+                                    {blockData.number > 0 ? "Success" : "Failed"}
+                                </span>
                             </div>
                         </div>
+                        <p className="text-sm text-emerald-100 mt-4">
+                            <span className="mr-2">
+                                Timestamp
+                            </span>
+                            <span className="whitespace-nowrap">
+                                {` ${formatDistanceToNow(blockData.timestamp * 1000)}`}
+                                <span className="font-bold">
+                                    {` (${format(blockData.timestamp * 1000, 'dd-MM-yy HH:mm')})`}
+                                </span>
+                            </span>
+                        </p>
+                        <p className="text-sm text-emerald-100 mt-4">
+                            <span className="mr-2">
+                                Transactions:
+                            </span>
+                            <span className="whitespace-nowrap">
+                                {blockData.transactions.length}
+                            </span>
+                        </p>
                     </div>
-                    <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
-                        <div className="relative flex flex-col min-w-0 break-words rounded-lg mb-6 xl:mb-0 shadow-lg border-2 border-thin">
-                            <div className="flex-auto p-4">
-                                <div className="flex flex-wrap">
-                                    <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
-                                        <h5 className="text-blueGray-400 uppercase font-bold text-xs">Fee Recipient:</h5>
-                                        <span
-                                            className={`font-bold text-xl ${blockData.number > 0 ? "text-green-500" : "text-red-500"}`}
-                                        >
-                                            <a
-                                                href={`https://etherscan.io/address/${blockData.miner}`}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                            >
-                                                {addressShortener(ensName || blockData.miner || "Pending")}
-                                            </a>
-                                        </span>
-                                    </div>
-                                </div>
-                                <p className="text-sm text-blueGray-500 mt-4">
-                                    <span className="text-emerald-500 mr-2">
-                                        <i className="fas fa-arrow-up"></i>Gas Used:</span>
-                                    <span className="whitespace-nowrap">
-                                        {formatNumber(formatUnits(blockData.gasUsed, 'wei'))}
-                                    </span>
-                                </p>
-                                <p className="text-sm text-blueGray-500 mt-4">
-                                    <span className="text-pink-500 mr-2">
-                                        <i className="fas fa-arrow-up"></i>Gas Limit:</span>
-                                    <span className="whitespace-nowrap">
-                                        {formatNumber(formatUnits(blockData.gasLimit, 'wei'))}
-                                    </span>
-                                </p>
+                </div>
+            </div>
+            <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
+                <div className="relative flex flex-col min-w-0 break-words rounded-lg mb-6 xl:mb-0 shadow-lg border-2 border-thin">
+                    <div className="flex-auto p-4">
+                        <div className="flex flex-wrap">
+                            <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
+                                <h5 className="text-blueGray-100 uppercase font-bold text-xs">Fee Recipient:</h5>
+                                <span>
+                                    <a
+                                        href={`https://etherscan.io/address/${blockData.miner}`}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className={`font-bold text-xl ${blockData.number > 0 ? "text-green-500" : "text-red-500"}`}
+                                    >
+                                        {ensName ? ensName : addressShortener(blockData.miner || "Pending")}
+                                    </a>
+                                </span>
                             </div>
                         </div>
+                        <p className="text-sm text-emerald-100 mt-4">
+                            <span className="mr-2">
+                                Gas Used:
+                            </span>
+                            <span className="whitespace-nowrap">
+                                {formatNumber(formatUnits(blockData.gasUsed, 'wei'))}
+                            </span>
+                        </p>
+                        <p className="text-sm text-emerald-100 mt-2">
+                            <span className="mr-2">
+                                Gas Limit:
+                            </span>
+                            <span className="whitespace-nowrap">
+                                {formatNumber(formatUnits(blockData.gasLimit, 'wei'))}
+                            </span>
+                        </p>
+                        <p className="text-sm text-emerald-100 mt-2">
+                            <span className="mr-2">
+                                Base Fee Per Gas:
+                            </span>
+                            <span className="whitespace-nowrap">
+                                {blockData.baseFeePerGas ? formatNumber(formatUnits(blockData.baseFeePerGas, 'wei')) : "N/A"}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
+                <div className="relative flex flex-col min-w-0 break-words rounded-lg mb-6 xl:mb-0 shadow-lg border-2 border-thin">
+                    <div className="flex-auto p-4">
+                        <div className="flex flex-wrap">
+                            <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
+                                <h5 className="text-blueGray-100 uppercase font-bold text-xs">Hash</h5>
+                                <span>
+                                    <a
+                                        href={`https://etherscan.io/block/${blockData.hash}`}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className={`font-bold text-xl text-emerald-900`}
+                                    >
+                                        {blockData.hash ? addressShortener(blockData.hash) : "Pending"}
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                        <p className="text-sm text-emerald-100 mt-4">
+                            <span className="mr-2">
+                                Parent Hash:
+                            </span>
+                            <span className="whitespace-nowrap">
+                                <a
+                                    href={`https://etherscan.io/block/${blockData.parentHash}`}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className={`font-bold text-xl text-emerald-900`}
+                                >
+                                    {blockData.parentHash ? addressShortener(blockData.parentHash) : "Pending"}
+                                </a>
+                            </span>
+                        </p>
+                        <p className="text-sm text-emerald-100 mt-2">
+                            <span className="mr-2">
+                                Nonce:
+                            </span>
+                            <span className="whitespace-nowrap">
+                                {blockData.nonce}
+                            </span>
+                        </p>                        
                     </div>
                 </div>
             </div>

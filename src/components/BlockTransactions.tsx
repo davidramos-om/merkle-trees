@@ -53,88 +53,90 @@ export default function BlockTransactions({ transactions }: Props) {
     const displayTransactions = transactions.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
     return (
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" className="px-6 py-3">
-                            Hash
-                        </th>
-                        <th scope="col" className="px-6 py-3">
-                            <div className="flex items-center">
-                                Value
-                                <SortIcon />
-                            </div>
-                        </th>
-                        <th scope="col" className="px-6 py-3">
-                            <div className="flex items-center">
-                                From
-                                <SortIcon />
-                            </div>
-                        </th>
-                        <th scope="col" className="px-6 py-3">
-                            <div className="flex items-center">
-                                To
-                                <SortIcon />
-                            </div>
-                        </th>
-                        <th scope="col" className="px-6 py-3">
-                            <div className="flex items-center">
-                                Nonce
-                                <SortIcon />
-                            </div>
-                        </th>
-                        <th scope="col" className="px-6 py-3">
-                            <div className="flex items-center">
-                                Gas Price
-                                <SortIcon />
-                            </div>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {displayTransactions.map((transaction, index) => (
-                        <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                <a
-                                    href={`https://etherscan.io/tx/${transaction.hash}`}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                >
-                                    {addressShortener(transaction.hash)}
-                                </a>
+        <>
+            <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-6">
+                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" className="px-6 py-3">
+                                Hash
                             </th>
-                            <td className="px-6 py-4">
-                                {(formatNumber(formatUnits(transaction.value, 'wei')))}
-                            </td>
-                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                <a
-                                    href={`https://etherscan.io/address/${transaction.from}`}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                >
-                                    {addressShortener(transaction.from)}
-                                </a>
+                            <th scope="col" className="px-6 py-3">
+                                <div className="flex items-center">
+                                    Value
+                                    <SortIcon />
+                                </div>
                             </th>
-                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                <a
-                                    href={`https://etherscan.io/address/${transaction.to}`}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                >
-                                    {addressShortener(transaction.to || 'Contract')}
-                                </a>
+                            <th scope="col" className="px-6 py-3">
+                                <div className="flex items-center">
+                                    From
+                                    <SortIcon />
+                                </div>
                             </th>
-                            <td className="px-6 py-4">
-                                {transaction.nonce}
-                            </td>
-                            <td className="px-6 py-4">
-                                {(formatNumber(formatUnits(transaction.gasPrice, 'wei')))}
-                            </td>
+                            <th scope="col" className="px-6 py-3">
+                                <div className="flex items-center">
+                                    To
+                                    <SortIcon />
+                                </div>
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                                <div className="flex items-center">
+                                    Nonce
+                                    <SortIcon />
+                                </div>
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                                <div className="flex items-center">
+                                    Gas Price
+                                    <SortIcon />
+                                </div>
+                            </th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {displayTransactions.map((transaction, index) => (
+                            <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <a
+                                        href={`https://etherscan.io/tx/${transaction.hash}`}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
+                                        {addressShortener(transaction.hash)}
+                                    </a>
+                                </th>
+                                <td className="px-6 py-4">
+                                    {(formatNumber(formatUnits(transaction.value, 'wei')))}
+                                </td>
+                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <a
+                                        href={`https://etherscan.io/address/${transaction.from}`}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
+                                        {addressShortener(transaction.from)}
+                                    </a>
+                                </th>
+                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <a
+                                        href={`https://etherscan.io/address/${transaction.to}`}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
+                                        {addressShortener(transaction.to || 'Contract')}
+                                    </a>
+                                </th>
+                                <td className="px-6 py-4">
+                                    {transaction.nonce}
+                                </td>
+                                <td className="px-6 py-4">
+                                    {(formatNumber(formatUnits(transaction.gasPrice, 'wei')))}
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>               
+            </div>
             <nav className="flex items-center justify-between pt-4" aria-label="Table navigation">
                 <span className="text-sm font-normal text-gray-100 dark:text-gray-400">
                     Showing
@@ -188,7 +190,6 @@ export default function BlockTransactions({ transactions }: Props) {
                     </li>
                 </ul>
             </nav>
-        </div>
-
+        </>
     );
 }
