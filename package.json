@@ -11,14 +11,21 @@
   "dependencies": {
     "date-fns": "^2.29.3",
     "ethers": "^6.0.5",
+    "html2canvas": "^1.4.1",
+    "merkletreejs": "^0.3.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "slugify": "^1.6.5"
+    "react-organizational-chart": "^2.2.0",
+    "sha.js": "^2.4.11",
+    "slugify": "^1.6.5",
+    "sweetalert2": "^11.7.2"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
+    "@types/node": "^18.14.0",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
+    "@types/sha.js": "^2.4.0",
     "@vitejs/plugin-react": "^3.1.0",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.21",
