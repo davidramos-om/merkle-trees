@@ -1,6 +1,9 @@
 # Merkle Tree in Blockchain
 
-Get a block hash from the Bitcoin blockchain and build a Merkle Tree from it.
+1. Get a block hash from the Ethereum blockchain and build a Merkle Tree from it.
+
+2. Display demo of the Merkle Tree.
+
 
 <div
 align="center"
@@ -15,6 +18,12 @@ style="width: 300px; height: 300px; background-color: rgba(230,93,292,0.2)
 <hr />
 <img 
 src="./public/preview.png"
+alt="merkle-tree"
+;"
+/>
+<hr />
+<img 
+src="./public/preview-tree.png"
 alt="merkle-tree"
 ;"
 />
