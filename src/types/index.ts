@@ -40,3 +40,17 @@ export type TransactionModel = {
     from: string;
     to: string;
 }
+
+
+export type ItemProps = {
+    name: string;
+    hash: string;
+    index: string
+    children?: any;
+}
+
+export type ChartProps = {
+    name: string;
+    hash: string;
+    children: ItemProps[];
+}

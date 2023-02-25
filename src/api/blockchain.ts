@@ -1,9 +1,7 @@
-
 import { ethers } from 'ethers';
 import { BlockModel, TransactionModel } from '../types/';
 
 const SATOSHIS_PER_BTC = 100000000;
-
 const PROVIDER_INSTANCES: { [ key: string ]: ethers.JsonRpcProvider } = {};
 
 function getProviderInstance(providerRpc: string) {
@@ -148,3 +146,6 @@ export async function getTrasactionDetails(txIDs: string[]) {
 
     return [];
 }
+
+
+
