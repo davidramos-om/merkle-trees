@@ -2,11 +2,12 @@ import './App.css'
 import { useEffect, useState } from "react";
 import { Block, TransactionResponse } from 'ethers';
 
+import { getEthBlock } from './api/blockchain';
 import { ThemeMode } from './components/ThemeMode';
 import BlockForm from './components/BlockForm';
 import BlockTransactions from "./components/BlockTransactions";
 import BlockData from "./components/BlockData";
-import { getEthBlock } from './api/blockchain';
+import MerkleTree from "./components/merkle-tree";
 
 function App() {
 
@@ -68,7 +69,7 @@ function App() {
         <div className="w-full lg:w-6/12 px-4">
           <div>
             <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
-              What is
+              What is a
             </h2>
             <h1
               className="font-extrabold text-transparent text-5xl lg:text-8xl bg-clip-text bg-gradient-to-r from-green-400 to-blue-500 bg-gradient-to-b from-gray-900 via-purple-900 to-violet-600 dark:from-green-900 via-blue-900  dark:to-orange-900" >
@@ -97,6 +98,8 @@ function App() {
 
       <br />
       <BlockTransactions transactions={transactions} />
+      <br />
+      <MerkleTree transactions={transactions} />
     </div>
   );
 }
