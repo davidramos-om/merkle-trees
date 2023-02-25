@@ -59,7 +59,7 @@ function App() {
       <ThemeMode />
       <div className="flex flex-row items-center justify-center text-gray-600" >
         <img
-          src="/merkle-tree-logo.png"
+          src="./merkle-tree-logo.png"
           alt="logo"
           width={280}
           height={180}
