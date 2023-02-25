@@ -3,10 +3,13 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": ".",
   "scripts": {
     "dev": "vite --host ",
     "build": "tsc && vite build",
-    "preview": "vite preview --host"
+    "preview": "vite preview",
+    "predeploy": "rm -rf build && rm -rf node_modules/.cache/gh-pages && yarn run build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "date-fns": "^2.29.3",
