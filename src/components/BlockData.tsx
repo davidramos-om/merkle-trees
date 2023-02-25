@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { formatDistanceToNow, format } from 'date-fns';
-import { Block, formatUnits, Transaction } from 'ethers';
+import { Block, formatUnits } from 'ethers';
 
-import { getEnsName, totalGwei } from "../api/blockchain";
+import { getEnsName } from "../api/blockchain";
 import { addressShortener, formatNumber } from "../utilities/helper";
 import { MagicIcon } from "./MagicIcon";
 
@@ -64,7 +64,7 @@ function BlockDataDetails({ blockData, rpcProvider }: { blockData: Block, rpcPro
             active = false;
         }
 
-    }, [ blockData.miner ]);
+    }, [ rpcProvider, blockData.miner ]);
 
     return (
         <div className="flex flex-wrap">
