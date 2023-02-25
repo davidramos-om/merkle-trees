@@ -1,13 +1,6 @@
 import { useState } from "react";
 
-export const getThemeMode = () => {
-
-
-    const localTheme = localStorage.theme;
-    if (localTheme && (localTheme === 'dark' || localTheme === 'light')) {
-        console.log('localTheme', localTheme)
-        return localTheme
-    }
+export function getThemefromHtml() {
 
     const htmlClass = document.documentElement.classList;
     if (htmlClass.contains('dark'))
@@ -17,7 +10,26 @@ export const getThemeMode = () => {
     if (htmlClass.contains('light'))
         return 'light'
 
-    return 'light'
+    return '';
+}
+
+localStorage.theme = getThemefromHtml();
+
+export const getThemeMode = () => {
+
+
+    const theme = getThemefromHtml();
+
+    if (theme)
+        return theme;
+
+    const localTheme = localStorage.theme;
+    if (localTheme && (localTheme === 'dark' || localTheme === 'light')) {
+        console.log('localTheme', localTheme)
+        return localTheme
+    }
+
+    return 'dark'
 }
 
 

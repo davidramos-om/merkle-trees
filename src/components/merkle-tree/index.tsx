@@ -9,6 +9,7 @@ import { buildChartForRendering, generateMerkleTree, generateMerkleTree_Demo, tx
 import { ChartProps } from "../../types";
 import { StyledNode } from "./StyledNode";
 import { List } from "./List";
+import { getThemeMode } from "../ThemeMode";
 
 
 type MerkleTreeProps = {
@@ -45,7 +46,7 @@ export default function MerkleTreeChart({ transactions }: MerkleTreeProps) {
 
     useEffect(() => {
 
-        if (transactions.length === 0)
+        if (treeSource === 'block' && transactions.length === 0)
             return;
 
         let active = true;
@@ -83,9 +84,13 @@ export default function MerkleTreeChart({ transactions }: MerkleTreeProps) {
             if (!el)
                 return;
 
-            console.log(el.scrollHeight, el.scrollWidth);
+            const theme = getThemeMode();
+            console.log(`🐛  -> 🔥 :  handleSaveDivAsImage 🔥 :  theme:`, theme);
+
 
             html2canvas(el, {
+                backgroundColor: theme === 'dark' ? '#1d2532' : '#ff47b2',
+                scale: 2,
                 ignoreElements: (el) => {
 
                     if (el.textContent === '...')

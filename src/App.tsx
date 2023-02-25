@@ -1,13 +1,30 @@
 import './App.css'
 import { useEffect, useState } from "react";
 import { Block, TransactionResponse } from 'ethers';
-
+import Swal from "sweetalert2";
 import { getEthBlock } from './api/blockchain';
 import { ThemeMode } from './components/ThemeMode';
 import BlockForm from './components/BlockForm';
 import BlockTransactions from "./components/BlockTransactions";
 import BlockData from "./components/BlockData";
 import MerkleTree from "./components/merkle-tree";
+
+
+function showLoader() {
+
+  Swal.fire({
+    title: 'Loading...',
+    html: 'Please wait while we fetch the block data',
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading()
+    }
+  });
+}
+
+function hideLoader() {
+  Swal.close();
+}
 
 function App() {
 
@@ -20,19 +37,29 @@ function App() {
     let active = true;
 
     const cb = async () => {
+      try {
 
-      if (!params.block || !params.provider)
-        return;
+        if (!params.block || !params.provider)
+          return;
 
-      const data = await getEthBlock(params.block, params.provider);
-      if (!data)
-        return;
+        showLoader();
+        const data = await getEthBlock(params.block, params.provider);
+        if (!data)
+          return;
 
-      if (active)
-        setBlockData(data.block);
+        if (active)
+          setBlockData(data.block);
 
-      if (active)
-        setTransactions(data.transactions);
+        if (active)
+          setTransactions(data.transactions);
+      }
+      catch (error) {
+        console.log(error);
+        hideLoader();
+      }
+      finally {
+        hideLoader();
+      }
     }
 
     cb();
@@ -44,8 +71,6 @@ function App() {
 
 
   const handleSubmit = (block: number, prov: string) => {
-
-    // if (block !== params.block && prov !== params.provider)
     setParams({ block, provider: prov });
   }
 
