@@ -74,7 +74,11 @@ export function buildHashableString(value: string[]) {
 }
 
 export function getMerkleableData(tx: TransactionResponse) {
+
     const nullish = '<*>'
+    if (!tx)
+        return nullish;
+
     return buildHashableString([
         tx.hash,
         tx.nonce.toString(),
